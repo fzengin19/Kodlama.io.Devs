@@ -3,11 +3,6 @@ using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.ProgrammingLanguages.Queries
 {
@@ -28,7 +23,7 @@ namespace Application.Features.ProgrammingLanguages.Queries
 
             public async Task<GetProgrammingLanguageDto> Handle(GetProgrammingLanguageQuery request, CancellationToken cancellationToken)
             {
-               ProgrammingLanguage programmingLanguage = await _programmingLanguageRepository.GetAsync(pl => pl.Id == request.Id);
+                ProgrammingLanguage programmingLanguage = await _programmingLanguageRepository.GetAsync(pl => pl.Id == request.Id);
                 GetProgrammingLanguageDto getProgrammingLanguageDto = _mapper.Map<GetProgrammingLanguageDto>(programmingLanguage);
 
                 return getProgrammingLanguageDto;

@@ -22,6 +22,183 @@ namespace Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Core.Security.Entities.OperationClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OpetationClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Security.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByIp")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReasonRevoked")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReplacedByToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Revoked")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RevokedByIp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshToken");
+                });
+
+            modelBuilder.Entity("Core.Security.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AuthenticatorType")
+                        .HasColumnType("int")
+                        .HasColumnName("AuthenticatorType");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FirstName");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LastName");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .HasColumnName("PasswordHash");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .HasColumnName("PasswordSalt");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit")
+                        .HasColumnName("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Security.Entities.UserOperationClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("OperationClaimId")
+                        .HasColumnType("int")
+                        .HasColumnName("OperationClaimId");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OperationClaimId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserOperationClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Developer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Developer", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.GitHubProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("DeveloperId")
+                        .HasColumnType("int")
+                        .HasColumnName("DeveloperId");
+
+                    b.Property<string>("GitHubUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("GitHubUrl");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeveloperId")
+                        .IsUnique();
+
+                    b.ToTable("GitHubProfiles", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.ProgrammingLanguage", b =>
                 {
                     b.Property<int>("Id")
@@ -31,18 +208,13 @@ namespace Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Developer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Developer");
-
                     b.Property<DateTime>("DevelopmentDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DevelopmentDate");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("Name");
 
                     b.HasKey("Id");
@@ -53,24 +225,177 @@ namespace Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Developer = "Dennis Ritchie & Bell Labs",
                             DevelopmentDate = new DateTime(1972, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "C"
                         },
                         new
                         {
                             Id = 2,
-                            Developer = "Bjarne Stroustrup (Bell Labs)",
                             DevelopmentDate = new DateTime(1983, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "C++"
                         },
                         new
                         {
                             Id = 3,
-                            Developer = "Mads Torgersen (Microsoft)",
                             DevelopmentDate = new DateTime(2000, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "C#"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DevelopmentDate = new DateTime(1995, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Java"
                         });
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProgrammingLanguageDeveloper", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("DeveloperId")
+                        .HasColumnType("int")
+                        .HasColumnName("DeveloperId");
+
+                    b.Property<int>("ProgrammingLanguageId")
+                        .HasColumnType("int")
+                        .HasColumnName("ProgrammingLanguageId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeveloperId");
+
+                    b.HasIndex("ProgrammingLanguageId");
+
+                    b.ToTable("ProgrammingLanguageDevelopers", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Technology", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Name");
+
+                    b.Property<int>("ProgrammingLanguageId")
+                        .HasColumnType("int")
+                        .HasColumnName("ProgrammingLanguageId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProgrammingLanguageId");
+
+                    b.ToTable("Technologies", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Security.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("Core.Security.Entities.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Core.Security.Entities.UserOperationClaim", b =>
+                {
+                    b.HasOne("Core.Security.Entities.OperationClaim", "OperationClaim")
+                        .WithMany()
+                        .HasForeignKey("OperationClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Security.Entities.User", "User")
+                        .WithMany("UserOperationClaims")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OperationClaim");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Developer", b =>
+                {
+                    b.HasOne("Core.Security.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.GitHubProfile", b =>
+                {
+                    b.HasOne("Domain.Entities.Developer", "Developer")
+                        .WithOne("GitHubProfile")
+                        .HasForeignKey("Domain.Entities.GitHubProfile", "DeveloperId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Developer");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProgrammingLanguageDeveloper", b =>
+                {
+                    b.HasOne("Domain.Entities.Developer", "Developer")
+                        .WithMany()
+                        .HasForeignKey("DeveloperId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ProgrammingLanguage", "ProgrammingLanguage")
+                        .WithMany()
+                        .HasForeignKey("ProgrammingLanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Developer");
+
+                    b.Navigation("ProgrammingLanguage");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Technology", b =>
+                {
+                    b.HasOne("Domain.Entities.ProgrammingLanguage", "ProgrammingLanguage")
+                        .WithMany("Technologies")
+                        .HasForeignKey("ProgrammingLanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProgrammingLanguage");
+                });
+
+            modelBuilder.Entity("Core.Security.Entities.User", b =>
+                {
+                    b.Navigation("RefreshTokens");
+
+                    b.Navigation("UserOperationClaims");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Developer", b =>
+                {
+                    b.Navigation("GitHubProfile");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProgrammingLanguage", b =>
+                {
+                    b.Navigation("Technologies");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,15 +1,13 @@
-﻿
+﻿using Application.Features.Developers.Rules;
 using Application.Features.ProgrammingLanguages.Rules;
+using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Validation;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application
 {
@@ -21,9 +19,11 @@ namespace Application
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddScoped<ProgrammingLanguageBusinessRules>();
+            services.AddScoped<UserBusinessRules>();
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CacheRemovingBehavior<,>));
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));

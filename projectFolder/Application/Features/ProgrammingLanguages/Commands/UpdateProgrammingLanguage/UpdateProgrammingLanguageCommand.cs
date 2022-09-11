@@ -4,11 +4,7 @@ using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Features.ProgrammingLanguages.Commands.UpdateProgrammingLanguageCommand
 {
@@ -16,7 +12,6 @@ namespace Application.Features.ProgrammingLanguages.Commands.UpdateProgrammingLa
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Developer { get; set; }
         public DateTime DevelopmentDate { get; set; }
 
         public  class UpdateProgrammingLanguageCommandHandler : IRequestHandler<UpdateProgrammingLanguageCommand, UpdatedProgrammingLanguageDto>
@@ -34,8 +29,8 @@ namespace Application.Features.ProgrammingLanguages.Commands.UpdateProgrammingLa
 
             public async Task<UpdatedProgrammingLanguageDto> Handle(UpdateProgrammingLanguageCommand request, CancellationToken cancellationToken)
             {
+                await _programmingLanguageBusinessRules.ProgrammingLanguageIdEmptyCheck(request.Id);
                 await _programmingLanguageBusinessRules.ProgrammingLanguageNameEmptyCheck(request.Name);
-                await _programmingLanguageBusinessRules.ProgrammingLanguageDeveloperEmptyCheck(request.Developer);
                 await _programmingLanguageBusinessRules.ProgrammingLanguageDevelopmentDateEmptyCheck(request.DevelopmentDate);
 
                 await _programmingLanguageBusinessRules.ProgrammingLanguageNameRepeatCheckOnUpdate(request.Id,request.Name);

@@ -4,36 +4,27 @@ using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.ProgrammingLanguages.Commands.DeleteProgrammingLanguagCommand
 {
     public class DeleteProgrammingLanguageCommand : IRequest<DeletedProgrammingLanguageDto>
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-
         public class DeleteProgrammingLanguageByNameCommandHandler : IRequestHandler<DeleteProgrammingLanguageCommand, DeletedProgrammingLanguageDto>
         {
             private readonly IProgrammingLanguageRepository _programmingLanguageRepository;
             private readonly IMapper _mapper;
             private readonly ProgrammingLanguageBusinessRules _programmingLanguageBusinessRules;
 
-            public DeleteProgrammingLanguageByNameCommandHandler(IProgrammingLanguageRepository programmingLanguageRepository, IMapper mapper, ProgrammingLanguageBusinessRules programmingLanguageBusinessRules)
+            public DeleteProgrammingLanguageByNameCommandHandler(IProgrammingLanguageRepository programmingLanguageRepository, IMapper mapper)
             {
                 _programmingLanguageRepository = programmingLanguageRepository;
                 _mapper = mapper;
-                _programmingLanguageBusinessRules = programmingLanguageBusinessRules;
             }
 
             public async Task<DeletedProgrammingLanguageDto> Handle(DeleteProgrammingLanguageCommand request, CancellationToken cancellationToken)
             {
-                await _programmingLanguageBusinessRules.ProgrammingLanguageNameEmptyCheck(request.Name);
-
+                await _programmingLanguageBusinessRules.ProgrammingLanguageIdEmptyCheck(request.Id);
                 ProgrammingLanguage toBeDeletedProgrammingLanguage = _mapper.Map<ProgrammingLanguage>(request);
                 ProgrammingLanguage deletedProgrammingLanguage = await _programmingLanguageRepository.DeleteAsync(toBeDeletedProgrammingLanguage);
                 DeletedProgrammingLanguageDto deletedProgrammingLanguageDto = _mapper.Map<DeletedProgrammingLanguageDto>(deletedProgrammingLanguage);

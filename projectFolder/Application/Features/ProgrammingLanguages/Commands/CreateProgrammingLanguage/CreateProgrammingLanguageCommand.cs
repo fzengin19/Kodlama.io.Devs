@@ -4,18 +4,13 @@ using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Features.ProgrammingLanguages.Commands.CreateProgrammingLanguage
 {
     public class CreateProgrammingLanguageCommand : IRequest<CreatedProgrammingLanguageDto>
     {
         public string Name { get; set; }
-        public string Developer { get; set; }
         public DateTime DevelopmentDate { get; set; }
         public class CreateProgrammingLanguageCommandHandler :IRequestHandler<CreateProgrammingLanguageCommand,CreatedProgrammingLanguageDto>
         {
@@ -33,7 +28,6 @@ namespace Application.Features.ProgrammingLanguages.Commands.CreateProgrammingLa
             public async Task<CreatedProgrammingLanguageDto> Handle(CreateProgrammingLanguageCommand request, CancellationToken cancellationToken)
             {
                 await _programmingLanguageBusinessRules.ProgrammingLanguageNameEmptyCheck(request.Name);
-                await _programmingLanguageBusinessRules.ProgrammingLanguageDeveloperEmptyCheck(request.Developer);
                 await _programmingLanguageBusinessRules.ProgrammingLanguageDevelopmentDateEmptyCheck(request.DevelopmentDate);
 
                 await _programmingLanguageBusinessRules.ProgrammingLanguageNameRepeatCheck(request.Name);

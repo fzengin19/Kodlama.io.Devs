@@ -1,28 +1,22 @@
 ﻿using Core.Persistence.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Domain.Entities
 {
     public class ProgrammingLanguage :Entity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
-        public string Developer { get; set; }
         public DateTime DevelopmentDate { get; set; }
+        public virtual List<Technology>? Technologies { get; set; }
         public ProgrammingLanguage()
         {
                 
         }
-        public ProgrammingLanguage(int ıd, string name, DateTime developmentDate, string developer)
+        public ProgrammingLanguage(int id, string name, DateTime developmentDate):this()
         {
-            Id = ıd;
+            Id = id;
             Name = name;
             DevelopmentDate = developmentDate;
-            Developer = developer;
         }
 
 

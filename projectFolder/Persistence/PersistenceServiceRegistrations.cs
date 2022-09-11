@@ -3,12 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Application.Services.Repositories;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Persistence.Repositories;
 
 namespace Persistence
@@ -21,6 +15,11 @@ namespace Persistence
                                               options.UseSqlServer(
                                                   configuration.GetConnectionString("KodlamaIODevsConnectionString")));
             services.AddScoped<IProgrammingLanguageRepository, ProgrammingLanguageRepository>();
+            services.AddScoped<IDeveloperRepository, DeveloperRepository>();
+            services.AddScoped<IProgrammingLanguageDeveloperRepository, ProgrammingLanguageDeveloperRepository>();
+            services.AddScoped<ITechnologyRepository, TechnologyRepository>();
+            services.AddScoped<IGitHubProfileRepository, GitHubProfileRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

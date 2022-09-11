@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Update([FromBody] UpdateProgrammingLanguageCommand updateProgrammingLanguageCommand)
         {
             UpdatedProgrammingLanguageDto result = await Mediator.Send(updateProgrammingLanguageCommand);
-            return Created("", result);
+            return Ok(result);
         }
 
         [HttpDelete("delete")]
