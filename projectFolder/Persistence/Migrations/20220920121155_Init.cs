@@ -76,7 +76,7 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Developer",
+                name: "Developers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -85,9 +85,9 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Developer", x => x.Id);
+                    table.PrimaryKey("PK_Developers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Developer_Users_UserId",
+                        name: "FK_Developers_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -160,9 +160,9 @@ namespace Persistence.Migrations
                 {
                     table.PrimaryKey("PK_GitHubProfiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GitHubProfiles_Developer_DeveloperId",
+                        name: "FK_GitHubProfiles_Developers_DeveloperId",
                         column: x => x.DeveloperId,
-                        principalTable: "Developer",
+                        principalTable: "Developers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -180,9 +180,9 @@ namespace Persistence.Migrations
                 {
                     table.PrimaryKey("PK_ProgrammingLanguageDevelopers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProgrammingLanguageDevelopers_Developer_DeveloperId",
+                        name: "FK_ProgrammingLanguageDevelopers_Developers_DeveloperId",
                         column: x => x.DeveloperId,
-                        principalTable: "Developer",
+                        principalTable: "Developers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -205,8 +205,8 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Developer_UserId",
-                table: "Developer",
+                name: "IX_Developers_UserId",
+                table: "Developers",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -264,7 +264,7 @@ namespace Persistence.Migrations
                 name: "UserOperationClaims");
 
             migrationBuilder.DropTable(
-                name: "Developer");
+                name: "Developers");
 
             migrationBuilder.DropTable(
                 name: "ProgrammingLanguages");

@@ -1,18 +1,22 @@
 ﻿using Application.Features.Technologies.Dtos;
+using Application.Features.Technologies.Models;
 using Application.Features.Technologies.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
+
 namespace Application.Features.Technologies.Commands.UpdateTechnology
 {
-    public class UpdateTechnologyCommand :IRequest<CrudTechnologyDto>
+    public class UpdateTechnologyCommand : IRequest<UpdatedTechnologyDto>
     {
         public int Id { get; set; }
-        public int ProgrammingLanguageId { get; set; }
-        public string? Name { get; set; }
-        public class UpdateTechnologyCommandHandler : IRequestHandler<UpdateTechnologyCommand, CrudTechnologyDto>
+        public int ProgrammingLangugeId { get; set; }
+        public string Name { get; set; }
+
+
+        public class UpdateTechnologyCommandHandler : IRequestHandler<UpdateTechnologyCommand, UpdatedTechnologyDto>
         {
             private readonly ITechnologyRepository _technologyRepository;
             private readonly IMapper _mapper;
@@ -25,18 +29,15 @@ namespace Application.Features.Technologies.Commands.UpdateTechnology
                 _technologyBusinessRules = technologyBusinessRules;
             }
 
-            public async Task<CrudTechnologyDto> Handle(UpdateTechnologyCommand request, CancellationToken cancellationToken)
+            public async Task<UpdatedTechnologyDto> Handle(UpdateTechnologyCommand request, CancellationToken cancellationToken)
             {
-                await _technologyBusinessRules.NameEmptyCheck(request.Name);
-                await _technologyBusinessRules.ProgrammingLanguageIdEmptyCheck(request.ProgrammingLanguageId);
-                await _technologyBusinessRules.ProgrammingLanguageCheck(request.Id);
+                await _technologyBusinessRules.TechnologyNameCanNotBeEmpty(request.Name);
+                await _technologyBusinessRules.UpdateTechnologyCheck(request.Id, request.ProgrammingLangugeId, request.Name);
+                Technology technology = _mapper.Map<Technology>(request);
+                Technology updatedTechnology = await _technologyRepository.UpdateAsync(technology);
+                UpdatedTechnologyDto updatedTechnologyDto = _mapper.Map<UpdatedTechnologyDto>(updatedTechnology);
 
-                Technology mappedTechnology = _mapper.Map<Technology>(request);
-                Technology updatedTechnology = await _technologyRepository.UpdateAsync(mappedTechnology);
-
-                CrudTechnologyDto crudTechnologyDto = _mapper.Map<CrudTechnologyDto>(updatedTechnology);
-
-                return crudTechnologyDto;
+                return updatedTechnologyDto;
             }
         }
     }

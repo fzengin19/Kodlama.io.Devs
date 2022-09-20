@@ -171,7 +171,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Developer", (string)null);
+                    b.ToTable("Developers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.GitHubProfile", b =>
@@ -354,13 +354,13 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.ProgrammingLanguageDeveloper", b =>
                 {
                     b.HasOne("Domain.Entities.Developer", "Developer")
-                        .WithMany()
+                        .WithMany("ProgrammingLanguageDevelopers")
                         .HasForeignKey("DeveloperId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.ProgrammingLanguage", "ProgrammingLanguage")
-                        .WithMany()
+                        .WithMany("ProgrammingLanguageDevelopers")
                         .HasForeignKey("ProgrammingLanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -391,10 +391,14 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Developer", b =>
                 {
                     b.Navigation("GitHubProfile");
+
+                    b.Navigation("ProgrammingLanguageDevelopers");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProgrammingLanguage", b =>
                 {
+                    b.Navigation("ProgrammingLanguageDevelopers");
+
                     b.Navigation("Technologies");
                 });
 #pragma warning restore 612, 618

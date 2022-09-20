@@ -29,11 +29,10 @@ namespace Application.Features.ProgrammingLanguages.Commands.UpdateProgrammingLa
 
             public async Task<UpdatedProgrammingLanguageDto> Handle(UpdateProgrammingLanguageCommand request, CancellationToken cancellationToken)
             {
-                await _programmingLanguageBusinessRules.ProgrammingLanguageIdEmptyCheck(request.Id);
-                await _programmingLanguageBusinessRules.ProgrammingLanguageNameEmptyCheck(request.Name);
-                await _programmingLanguageBusinessRules.ProgrammingLanguageDevelopmentDateEmptyCheck(request.DevelopmentDate);
+                await _programmingLanguageBusinessRules.ProgrammingLanguageNameCanNotBeEmpty(request.Name);
+                await _programmingLanguageBusinessRules.ProgrammingLanguageDevelopmentDateCanNotBeEmpty(request.DevelopmentDate);
 
-                await _programmingLanguageBusinessRules.ProgrammingLanguageNameRepeatCheckOnUpdate(request.Id,request.Name);
+                await _programmingLanguageBusinessRules.ProgrammingLanguageNameCanNotBeDuplicateOnUpdate(request.Id,request.Name);
 
                 ProgrammingLanguage mappedprogrammingLanguage = _mapper.Map<ProgrammingLanguage>(request);
                 ProgrammingLanguage updatedProgrammingLanguage = await _programmingLanguageRepository.UpdateAsync(mappedprogrammingLanguage);

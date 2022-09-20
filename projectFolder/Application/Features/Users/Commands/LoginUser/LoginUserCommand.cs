@@ -1,5 +1,6 @@
 ﻿using Application.Features.Developers.Rules;
 using Application.Features.Users.Dtos;
+using Application.Features.Users.Models;
 using Application.Services.Repositories;
 using AutoMapper;
 using Core.CrossCuttingConcerns.Exceptions;
@@ -24,11 +25,12 @@ namespace Application.Features.Users.Commands.LoginUser
             private readonly ITokenHelper _tokenHelper;
             private readonly UserBusinessRules _userBusinessRules;
 
-            public LoginUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules)
+            public LoginUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules, ITokenHelper tokenHelper)
             {
                 _userRepository = userRepository;
                 _mapper = mapper;
                 _userBusinessRules = userBusinessRules;
+                _tokenHelper = tokenHelper;
             }
 
             public async Task<UserLoginDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
@@ -40,7 +42,7 @@ namespace Application.Features.Users.Commands.LoginUser
                 User? user = await _userRepository.GetAsync(
                 u => u.Email == request.Email,
                 include: m => m.Include(c => c.UserOperationClaims).ThenInclude(x => x.OperationClaim));
-                if (user == null) throw new Exception("Wrong email");
+                if (user == null) throw new AuthorizationException("Wrong email");
 
                 List<OperationClaim> operationClaims = new List<OperationClaim>();
 
@@ -51,13 +53,21 @@ namespace Application.Features.Users.Commands.LoginUser
 
                 
                 bool result = HashingHelper.VerifyPasswordHash(request.Password,user.PasswordHash,user.PasswordSalt);
-                if (result) throw new Exception("Wrong password");
+                if (!result) throw new AuthorizationException("Wrong password");
 
-              
-                UserLoginDto userLoginDto = new UserLoginDto();
-                userLoginDto.AccessToken = _tokenHelper.CreateToken(user, operationClaims);
-                userLoginDto.Id = user.Id;
-                userLoginDto.Name = user.FirstName + " " + user.LastName;
+
+                //UserLoginDto userLoginDto = new UserLoginDto();
+                //userLoginDto.AccessToken = _tokenHelper.CreateToken(user, operationClaims);
+                //userLoginDto.Id = user.Id;
+                //userLoginDto.Name = user.FirstName + " " + user.LastName;
+                //return userLoginDto;
+                UserLoginDto userLoginDto = _mapper.Map<UserLoginDto>(user);
+
+                var token = _tokenHelper.CreateToken(user, new List<OperationClaim>());
+
+                userLoginDto.AccessToken = token;
+               
+
                 return userLoginDto;
 
 

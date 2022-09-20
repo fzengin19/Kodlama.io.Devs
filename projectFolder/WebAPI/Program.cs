@@ -1,5 +1,7 @@
 using Persistence;
 using Application;
+using Core.Security;
+using Core.CrossCuttingConcerns.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
+//app.ConfigureCustomExceptionMiddleware();
 
 app.UseAuthorization();
 

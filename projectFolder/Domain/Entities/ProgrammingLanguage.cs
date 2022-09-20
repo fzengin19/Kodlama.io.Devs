@@ -8,6 +8,7 @@ namespace Domain.Entities
         public string Name { get; set; }
         public DateTime DevelopmentDate { get; set; }
         public virtual List<Technology>? Technologies { get; set; }
+        public IEnumerable<ProgrammingLanguageDeveloper> ProgrammingLanguageDevelopers { get; set; }
         public ProgrammingLanguage()
         {
                 

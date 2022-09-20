@@ -11,8 +11,8 @@ namespace Domain.Entities
     {
         public int ProgrammingLanguageId { get; set; }
         public int DeveloperId { get; set; }
-        public virtual ProgrammingLanguage? ProgrammingLanguage { get; set; }
-        public virtual Developer? Developer { get; set; }
+        public virtual ProgrammingLanguage ProgrammingLanguage { get; set; }
+        public virtual Developer Developer { get; set; }
         public ProgrammingLanguageDeveloper()
         {
 

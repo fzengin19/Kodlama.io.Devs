@@ -9,7 +9,7 @@ namespace Persistence.Mappings
     {
         public void Configure(EntityTypeBuilder<Developer> builder)
         {
-            builder.ToTable("Developer").HasKey(d => d.Id);
+            builder.ToTable("Developers").HasKey(d => d.Id);
             builder.HasOne<GitHubProfile>(d => d.GitHubProfile);
 
         }

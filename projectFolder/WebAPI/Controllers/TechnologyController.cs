@@ -1,4 +1,5 @@
-﻿using Application.Features.Technologies.Commands.CreateTechnology;
+﻿
+using Application.Features.Technologies.Commands.CreateTechnology;
 using Application.Features.Technologies.Commands.DeleteTechnology;
 using Application.Features.Technologies.Commands.UpdateTechnology;
 using Application.Features.Technologies.Dtos;
@@ -14,21 +15,21 @@ namespace WebAPI.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] CreateTechnologyCommand createTechnologyCommand)
         {
-            CrudTechnologyDto result = await Mediator.Send(createTechnologyCommand);
+            CreatedTechnologyDto result = await Mediator.Send(createTechnologyCommand);
             return Created("", result);
         }
 
-        [HttpPost("update")]
+        [HttpPut("update")]
         public async Task<IActionResult> Update([FromBody] UpdateTechnologyCommand updateTechnologyCommand)
         {
-            CrudTechnologyDto result = await Mediator.Send(updateTechnologyCommand);
+            UpdatedTechnologyDto result = await Mediator.Send(updateTechnologyCommand);
             return Ok(result);
         }
 
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete([FromBody] DeleteTechnologyCommand DeleteTechnologyCommand)
         {
-            CrudTechnologyDto result = await Mediator.Send(DeleteTechnologyCommand);
+            DeletedTechnologyDto result = await Mediator.Send(DeleteTechnologyCommand);
             return Ok(result);
         }
     }

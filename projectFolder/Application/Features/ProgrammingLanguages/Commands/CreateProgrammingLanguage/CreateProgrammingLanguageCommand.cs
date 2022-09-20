@@ -12,7 +12,7 @@ namespace Application.Features.ProgrammingLanguages.Commands.CreateProgrammingLa
     {
         public string Name { get; set; }
         public DateTime DevelopmentDate { get; set; }
-        public class CreateProgrammingLanguageCommandHandler :IRequestHandler<CreateProgrammingLanguageCommand,CreatedProgrammingLanguageDto>
+        public class CreateProgrammingLanguageCommandHandler :IRequestHandler<CreateProgrammingLanguageCommand, CreatedProgrammingLanguageDto>
         {
             private readonly IProgrammingLanguageRepository _programmingLanguageRepository;
             private readonly IMapper _mapper;
@@ -27,10 +27,10 @@ namespace Application.Features.ProgrammingLanguages.Commands.CreateProgrammingLa
 
             public async Task<CreatedProgrammingLanguageDto> Handle(CreateProgrammingLanguageCommand request, CancellationToken cancellationToken)
             {
-                await _programmingLanguageBusinessRules.ProgrammingLanguageNameEmptyCheck(request.Name);
-                await _programmingLanguageBusinessRules.ProgrammingLanguageDevelopmentDateEmptyCheck(request.DevelopmentDate);
+                await _programmingLanguageBusinessRules.ProgrammingLanguageNameCanNotBeEmpty(request.Name);
+                await _programmingLanguageBusinessRules.ProgrammingLanguageDevelopmentDateCanNotBeEmpty(request.DevelopmentDate);
 
-                await _programmingLanguageBusinessRules.ProgrammingLanguageNameRepeatCheck(request.Name);
+                await _programmingLanguageBusinessRules.ProgrammingLanguageNameCanNotBeDuplicate(request.Name);
            
 
                 ProgrammingLanguage mappedprogrammingLanguage = _mapper.Map<ProgrammingLanguage>(request);

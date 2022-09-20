@@ -1,5 +1,8 @@
 ﻿using Application.Features.Developers.Rules;
+using Application.Features.GitHubProfiles.Rules;
+using Application.Features.ProgrammingLanguageDevelopers.Rules;
 using Application.Features.ProgrammingLanguages.Rules;
+using Application.Features.Technologies.Rules;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Validation;
 using FluentValidation;
@@ -19,7 +22,11 @@ namespace Application
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddScoped<ProgrammingLanguageBusinessRules>();
+            services.AddScoped<DeveloperBusinessRules>();
             services.AddScoped<UserBusinessRules>();
+            services.AddScoped<GitHubProfileBusinnessRules>();
+            services.AddScoped<ProgrammingLanguageDeveloperBusinessRules>();
+            services.AddScoped<TechnologyBusinessRules>();
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));

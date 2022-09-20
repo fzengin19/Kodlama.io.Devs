@@ -1,7 +1,6 @@
 ﻿using Core.Persistence.Repositories;
 using Core.Security.Entities;
-using Core.Security.Enums;
-
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.Entities
 {
@@ -9,6 +8,7 @@ namespace Domain.Entities
     {
         public int UserId { get; set; }
         public GitHubProfile? GitHubProfile { get; set; }
+        public IEnumerable<ProgrammingLanguageDeveloper> ProgrammingLanguageDevelopers { get; set; }
         public virtual User? User { get; set; }
 
         public Developer()
