@@ -12,13 +12,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Users.Commands.LoginUser
 {
-    public class LoginUserCommand : IRequest<UserLoginDto>
+    public class LoginUserCommand : IRequest<LoginedUserDto>
     {
         public string Email { get; set; }
         public string Password { get; set; }
 
 
-        public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, UserLoginDto>
+        public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginedUserDto>
         {
             private readonly IUserRepository _userRepository;
             private readonly IMapper _mapper;
@@ -33,7 +33,7 @@ namespace Application.Features.Users.Commands.LoginUser
                 _tokenHelper = tokenHelper;
             }
 
-            public async Task<UserLoginDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+            public async Task<LoginedUserDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
             {
                 await _userBusinessRules.UserEmailEmptyCheck(request.Email);
                 await _userBusinessRules.UserPasswordMinSizeCheck(request.Password);
@@ -61,14 +61,14 @@ namespace Application.Features.Users.Commands.LoginUser
                 //userLoginDto.Id = user.Id;
                 //userLoginDto.Name = user.FirstName + " " + user.LastName;
                 //return userLoginDto;
-                UserLoginDto userLoginDto = _mapper.Map<UserLoginDto>(user);
+                LoginedUserDto loginedUserDto = _mapper.Map<LoginedUserDto>(user);
 
                 var token = _tokenHelper.CreateToken(user, new List<OperationClaim>());
 
-                userLoginDto.AccessToken = token;
+                loginedUserDto.AccessToken = token;
                
 
-                return userLoginDto;
+                return loginedUserDto;
 
 
             }
